@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<resources>-->
+
+<!--    <style name="Theme.VolumeBubble" parent="android:Theme.Material.Light.NoActionBar" />-->
+<!--</resources>-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.VolumeBubble" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+    <style name="Theme.VolumeBubble" parent="Base.Theme.VolumeBubble" />
+</resources>
