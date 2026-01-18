@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/volume_demo.gif" width="300" alt="Volume Bubble Demo">
+  <img src="assets/demo.gif" width="280" alt="Volume Bubble Demo">
 </p>
 
 # Volume Bubble 🫧
