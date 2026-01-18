@@ -13,7 +13,6 @@ import com.doriit.volumebubble.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    // Modern way to handle permission results
     private val overlayPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {

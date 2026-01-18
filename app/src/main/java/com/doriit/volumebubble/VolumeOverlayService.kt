@@ -1,5 +1,4 @@
 package com.doriit.volumebubble
-
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -11,7 +10,6 @@ import android.os.IBinder
 import android.view.*
 import android.widget.ImageView
 import androidx.core.app.NotificationCompat
-import kotlin.math.abs
 import kotlin.math.sqrt
 
 class VolumeOverlayService : Service() {
@@ -36,10 +34,8 @@ class VolumeOverlayService : Service() {
         createNotificationChannel()
         startForeground(1, createNotification())
 
-        // 1. Initialize the Trash View FIRST so it's ready for the listener
         setupTrashView()
 
-        // 2. Now setup the Floating View
         setupFloatingView()
     }
 
@@ -51,7 +47,6 @@ class VolumeOverlayService : Service() {
             val channel = NotificationChannel("vol_channel", name, importance).apply {
                 description = descriptionText
             }
-            // Register the channel with the system
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -72,7 +67,6 @@ class VolumeOverlayService : Service() {
             y = 100
         }
 
-        // This now works because trashView was initialized above!
         setupTouchListener()
         windowManager.addView(floatingView, params)
     }
@@ -100,9 +94,8 @@ class VolumeOverlayService : Service() {
         var initialY = 0
         var initialTouchX = 0f
         var initialTouchY = 0f
-        val touchSlop = 10 // Threshold to distinguish tap vs drag
+        val touchSlop = 10
 
-        // Ensure trash is hidden when the service starts
         trashView.visibility = View.GONE
 
         floatingView.setOnTouchListener { _, event ->
@@ -113,10 +106,8 @@ class VolumeOverlayService : Service() {
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
 
-                    // Visual feedback: Bubble becomes solid
                     bubble.alpha = 1.0f
 
-                    // Show trash zone with a smooth fade-in
                     trashView.visibility = View.VISIBLE
                     trashIcon.alpha = 0f
                     trashIcon.animate().alpha(0.6f).setDuration(200).start()
@@ -128,13 +119,10 @@ class VolumeOverlayService : Service() {
                     params.y = initialY + (event.rawY - initialTouchY).toInt()
                     windowManager.updateViewLayout(floatingView, params)
 
-                    // Trash Interaction Logic
                     if (isOverTrash()) {
-                        // Hover State: Grow, brighten, and turn RED
                         trashIcon.animate().scaleX(1.4f).scaleY(1.4f).alpha(1.0f).setDuration(100).start()
                         trashIcon.setColorFilter(android.graphics.Color.RED)
                     } else {
-                        // Normal Drag State: Shrink back and reset color
                         trashIcon.animate().scaleX(1.0f).scaleY(1.0f).alpha(0.6f).setDuration(100).start()
                         trashIcon.clearColorFilter()
                     }
@@ -142,31 +130,25 @@ class VolumeOverlayService : Service() {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    // Return bubble to idle transparency
                     bubble.alpha = 0.4f
 
-                    // Hide trash zone with a smooth fade-out
                     trashIcon.animate().alpha(0f).scaleX(0.8f).scaleY(0.8f).setDuration(200).withEndAction {
                         trashView.visibility = View.GONE
                     }.start()
 
                     if (isOverTrash()) {
-                        // User dropped the bubble in the trash
                         stopSelf()
                     } else {
-                        // Check if it was a simple tap or a drag
                         val diffX = Math.abs(event.rawX - initialTouchX)
                         val diffY = Math.abs(event.rawY - initialTouchY)
 
                         if (diffX < touchSlop && diffY < touchSlop) {
-                            // Action: Single Tap (Show Volume Slider)
                             audioManager.adjustStreamVolume(
                                 AudioManager.STREAM_MUSIC,
                                 AudioManager.ADJUST_SAME,
                                 AudioManager.FLAG_SHOW_UI
                             )
                         } else {
-                            // Action: Release after drag (Snap to edge)
                             snapToEdge()
                         }
                     }
@@ -185,14 +167,12 @@ class VolumeOverlayService : Service() {
         val middle = screenWidth / 2
         val viewWidth = floatingView.width
 
-        // Determine if the bubble is on the left or right half of the screen
         val targetX = if (params.x + (viewWidth / 2) < middle) {
-            0 // Snap to left edge
+            0
         } else {
-            screenWidth - viewWidth // Snap to right edge
+            screenWidth - viewWidth
         }
 
-        // Apply the new position
         params.x = targetX
         windowManager.updateViewLayout(floatingView, params)
     }
@@ -207,7 +187,7 @@ class VolumeOverlayService : Service() {
             Math.pow((bubbleLocation[0] - trashLocation[0]).toDouble(), 2.0) +
                     Math.pow((bubbleLocation[1] - trashLocation[1]).toDouble(), 2.0)
         )
-        return distance < 300 // Adjust sensitivity here
+        return distance < 300
     }
 
     override fun onDestroy() {

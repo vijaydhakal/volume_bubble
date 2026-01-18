@@ -19,3 +19,21 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Optimization: Standard Android optimizations
+-optimizationpasses 5
+-allowaccessmodification
+
+# Keep your Activity and Service classes so Android can launch them
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Service
+-keep public class * extends android.app.Application
+
+# Keep ViewBinding classes (Important since we use ViewBinding)
+-keep class **.databinding.** { *; }
+# Optional: Strip out any remaining debug logging
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}
