@@ -24,4 +24,4 @@ To provide a seamless overlay experience on modern Android versions (API 26 to A
 ## 🏗 How to Build
 1. **Clone the repository**:
    ```bash
-   git clone [https://github.com/vijaydhakal/volume_bubble.git](https://github.com/vijaydhakal/volume_bubble.git)
+   git clone https://github.com/vijaydhakal/volume_bubble.git
