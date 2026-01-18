@@ -1,4 +1,6 @@
-![App Demo](assets/demo.gif)
+<p align="center">
+  <img src="assets/volume_demo.gif" width="300" alt="Volume Bubble Demo">
+</p>
 
 # Volume Bubble 🫧
 A minimalist floating volume controller for Android.
